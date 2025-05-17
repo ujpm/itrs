@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Paper elevation={3} sx={{ p: { xs: 2, md: 6 }, maxWidth: 600, mx: 'auto', textAlign: 'center', bgcolor: 'background.paper', borderRadius: 3 }}>
+    <Box sx={{ minHeight: '100vh', width: '100vw', bgcolor: 'background.default', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, sm: 4, md: 6 }, width: '100%', maxWidth: 600, mx: 'auto', textAlign: 'center', bgcolor: 'background.paper', borderRadius: 3, boxSizing: 'border-box' }}>
         <Typography variant="h3" color="primary" fontWeight={700} mb={2}>
           Welcome to ITRS
         </Typography>

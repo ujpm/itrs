@@ -21,76 +21,80 @@ export default function ComplaintForm() {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ p: 2, maxWidth: 500, mx: 'auto' }}>
-      <Typography variant="h5" mb={2}>Report an Issue</Typography>
-      {/* Category Dropdown */}
-      <FormControl fullWidth margin="normal" required>
-        <InputLabel>Category</InputLabel>
-        <Select
-          value={category}
-          label="Category"
-          onChange={e => {
-            setCategory(e.target.value);
-            setSubcategory('');
-            setIssue('');
-          }}
-        >
-          {categories.map(cat => <MenuItem key={cat.label} value={cat.label}>{cat.label}</MenuItem>)}
-        </Select>
-      </FormControl>
-      {/* Subcategory Dropdown */}
-      {category && (
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel>Subcategory</InputLabel>
-          <Select
-            value={subcategory}
-            label="Subcategory"
-            onChange={e => {
-              setSubcategory(e.target.value);
-              setIssue('');
-            }}
+    <Box sx={{ minHeight: '100vh', width: '100vw', bgcolor: 'background.default', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, sm: 4, md: 6 }, width: '100%', maxWidth: 500, mx: 'auto', textAlign: 'center', bgcolor: 'background.paper', borderRadius: 3, boxSizing: 'border-box' }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+          <Typography variant="h5" mb={2}>Report an Issue</Typography>
+          {/* Category Dropdown */}
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Category</InputLabel>
+            <Select
+              value={category}
+              label="Category"
+              onChange={e => {
+                setCategory(e.target.value);
+                setSubcategory('');
+                setIssue('');
+              }}
+            >
+              {categories.map(cat => <MenuItem key={cat.label} value={cat.label}>{cat.label}</MenuItem>)}
+            </Select>
+          </FormControl>
+          {/* Subcategory Dropdown */}
+          {category && (
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel>Subcategory</InputLabel>
+              <Select
+                value={subcategory}
+                label="Subcategory"
+                onChange={e => {
+                  setSubcategory(e.target.value);
+                  setIssue('');
+                }}
+              >
+                {selectedCategory?.subcategories.map(sub => <MenuItem key={sub.label} value={sub.label}>{sub.label}</MenuItem>)}
+              </Select>
+            </FormControl>
+          )}
+          {/* Issue Dropdown */}
+          {subcategory && (
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel>Issue</InputLabel>
+              <Select
+                value={issue}
+                label="Issue"
+                onChange={e => setIssue(e.target.value)}
+              >
+                {selectedSubcategory?.issues.map(issueVal => <MenuItem key={issueVal} value={issueVal}>{issueVal}</MenuItem>)}
+              </Select>
+            </FormControl>
+          )}
+          <TextField
+            label="Description"
+            value={detail}
+            onChange={e => setDetail(e.target.value)}
+            multiline
+            rows={3}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <FormControlLabel
+            control={<Switch checked={privacy} onChange={e => setPrivacy(e.target.checked)} />}
+            label="Make complaint public (visible on map)"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={!category || !subcategory || !issue || !detail}
           >
-            {selectedCategory?.subcategories.map(sub => <MenuItem key={sub.label} value={sub.label}>{sub.label}</MenuItem>)}
-          </Select>
-        </FormControl>
-      )}
-      {/* Issue Dropdown */}
-      {subcategory && (
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel>Issue</InputLabel>
-          <Select
-            value={issue}
-            label="Issue"
-            onChange={e => setIssue(e.target.value)}
-          >
-            {selectedSubcategory?.issues.map(issueVal => <MenuItem key={issueVal} value={issueVal}>{issueVal}</MenuItem>)}
-          </Select>
-        </FormControl>
-      )}
-      <TextField
-        label="Description"
-        value={detail}
-        onChange={e => setDetail(e.target.value)}
-        multiline
-        rows={3}
-        fullWidth
-        margin="normal"
-        required
-      />
-      <FormControlLabel
-        control={<Switch checked={privacy} onChange={e => setPrivacy(e.target.checked)} />}
-        label="Make complaint public (visible on map)"
-      />
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        fullWidth
-        sx={{ mt: 2 }}
-        disabled={!category || !subcategory || !issue || !detail}
-      >
-        Submit
-      </Button>
+            Submit
+          </Button>
+        </Box>
+      </Paper>
     </Box>
   );
 }
