@@ -1,13 +1,54 @@
-# React + TypeScript + Vite
+# Citizen Engagement System (ITRS)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web platform for citizens to submit complaints and feedback on public services, with smart routing, transparent tracking, and engaging dashboards.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
+- **Landing Page:** Public homepage with clear CTA and navigation.
+- **Authentication:** Signup/login (JWT, role-based: citizen/admin).
+- **Complaint Submission:**
+  - Selectable category cards (Infrastructure, Governance, etc.)
+  - Nested dropdowns for subcategory and issue
+  - Privacy toggle (public/private)
+  - Map picker (Leaflet integration coming soon)
+  - File attachment upload (coming soon)
+- **Dashboards:**
+  - (Planned) Citizen and Admin dashboards for tracking, analytics, and management
+- **Modern UI:** Material UI, custom theme, responsive and accessible
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
+- **Frontend:** React + TypeScript + Vite
+- **UI:** Material UI (MUI)
+- **Routing:** React Router
+- **API Calls:** Axios
+- **Map:** Leaflet (via react-leaflet)
+- **State:** React hooks
+
+## 🚀 Getting Started
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Start the dev server:**
+   ```bash
+   npm run dev
+   ```
+3. **Open your browser:**
+   Visit [http://localhost:5173](http://localhost:5173)
+
+## 📁 Project Structure
+- `src/pages/` — Main pages (Home, Login, Signup, etc.)
+- `src/components/` — Reusable UI components (ComplaintForm, MapPicker, etc.)
+- `src/data/` — Static data (categories, etc.)
+- `src/theme.ts` — Custom Material UI theme
+
+## 🌍 Backend
+Backend (Node.js/Express/MongoDB) is in `/backend` (see its README for setup).
+
+---
+
+> Built with ❤️ for civic engagement and better public services.
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
