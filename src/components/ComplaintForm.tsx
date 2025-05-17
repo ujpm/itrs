@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, TextField, MenuItem, FormControl, InputLabel, Select, Switch, FormControlLabel, Typography, Paper } from '@mui/material';
 import { categories } from '../data/categories';
+import MapPicker from './MapPicker';
 
 
 export default function ComplaintForm() {
@@ -21,25 +22,41 @@ export default function ComplaintForm() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', width: '100vw', bgcolor: 'background.default', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
-      <Paper elevation={3} sx={{ p: { xs: 2, sm: 4, md: 6 }, width: '100%', maxWidth: 500, mx: 'auto', textAlign: 'center', bgcolor: 'background.paper', borderRadius: 3, boxSizing: 'border-box' }}>
-        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', px: { xs: 1, sm: 3, md: 6 }, py: { xs: 2, md: 4 } }}>
+      <Paper>
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: 900, mx: 'auto', textAlign: 'left' }}>
           <Typography variant="h5" mb={2}>Report an Issue</Typography>
-          {/* Category Dropdown */}
-          <FormControl fullWidth margin="normal" required>
-            <InputLabel>Category</InputLabel>
-            <Select
-              value={category}
-              label="Category"
-              onChange={e => {
-                setCategory(e.target.value);
-                setSubcategory('');
-                setIssue('');
-              }}
-            >
-              {categories.map(cat => <MenuItem key={cat.label} value={cat.label}>{cat.label}</MenuItem>)}
-            </Select>
-          </FormControl>
+          {/* Horizontal Selectable Category Cards */}
+          <Box sx={{ display: 'flex', overflowX: 'auto', gap: 2, mb: 3, pb: 1 }}>
+            {categories.map(cat => (
+              <Box
+                key={cat.label}
+                onClick={() => {
+                  setCategory(cat.label);
+                  setSubcategory('');
+                  setIssue('');
+                }}
+                sx={{
+                  minWidth: 120,
+                  px: 2,
+                  py: 1.5,
+                  borderRadius: 2,
+                  border: 2,
+                  borderColor: category === cat.label ? 'primary.main' : 'grey.300',
+                  bgcolor: category === cat.label ? 'primary.light' : 'grey.100',
+                  color: category === cat.label ? 'primary.contrastText' : 'text.primary',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  boxShadow: category === cat.label ? 2 : 0,
+                  transition: 'all 0.2s',
+                  flex: '0 0 auto',
+                  '&:hover': { borderColor: 'primary.main', bgcolor: 'primary.50' }
+                }}
+              >
+                {cat.label}
+              </Box>
+            ))}
+          </Box>
           {/* Subcategory Dropdown */}
           {category && (
             <FormControl fullWidth margin="normal" required>
@@ -69,6 +86,10 @@ export default function ComplaintForm() {
               </Select>
             </FormControl>
           )}
+
+          {/* Map Picker */}
+          <MapPicker />
+
           <TextField
             label="Description"
             value={detail}

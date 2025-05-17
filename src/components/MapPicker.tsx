@@ -1,14 +1,13 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 // import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 // import 'leaflet/dist/leaflet.css';
 
 export default function MapPicker() {
-  // For MVP, stub out the map picker UI
   return (
-    <Box sx={{ my: 2 }}>
-      <Typography variant="body1" color="text.secondary">
-        [Map Picker Placeholder: Integrate Leaflet.js here for location selection]
-      </Typography>
+    <Box>
+      <Paper sx={{ mt: 3, mb: 2, p: 2, bgcolor: 'grey.50', border: '1px dashed #aaa', textAlign: 'center' }}>
+        <Typography color="text.secondary">Map picker coming soon (Leaflet integration)</Typography>
+      </Paper>
     </Box>
   );
 }
