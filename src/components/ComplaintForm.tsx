@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, TextField, MenuItem, FormControl, InputLabel, Select, Switch, FormControlLabel, Typography } from '@mui/material';
+import { Box, Button, TextField, MenuItem, FormControl, InputLabel, Select, Switch, FormControlLabel, Typography, Paper } from '@mui/material';
 import { categories } from '../data/categories';
 
 
