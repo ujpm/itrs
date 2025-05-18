@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Stack, MenuItem, Select, Typography } from '@mui/material';
-import { SelectChangeEvent } from '@mui/material/Select';
+
 
 type AdminBulkActionsBarProps = {
   selectedIds: number[];
@@ -22,7 +22,7 @@ export default function AdminBulkActionsBar({ selectedIds, onBulkStatus, onBulkA
           size="small"
           value={bulkStatus}
           displayEmpty
-          onChange={(e: SelectChangeEvent) => setBulkStatus(e.target.value as string)}
+          onChange={e => setBulkStatus((e.target as HTMLInputElement).value as string)}
           sx={{ minWidth: 120 }}
         >
           <MenuItem value="">Update Status</MenuItem>
@@ -43,7 +43,7 @@ export default function AdminBulkActionsBar({ selectedIds, onBulkStatus, onBulkA
           size="small"
           value={bulkAssignee}
           displayEmpty
-          onChange={(e: SelectChangeEvent) => setBulkAssignee(e.target.value as string)}
+          onChange={e => setBulkAssignee((e.target as HTMLInputElement).value as string)}
           sx={{ minWidth: 120 }}
         >
           <MenuItem value="">Assign To</MenuItem>

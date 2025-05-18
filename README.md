@@ -4,6 +4,7 @@ A modern web platform for citizens to submit complaints and feedback on public s
 
 ---
 
+
 ## ✨ Features
 - **Landing Page:** Public homepage with clear CTA and navigation.
 - **Authentication:** Signup/login (JWT, role-based: citizen/admin).
