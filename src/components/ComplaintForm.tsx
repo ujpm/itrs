@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, TextField, MenuItem, FormControl, InputLabel, Select, Switch, FormControlLabel, Typography, Paper } from '@mui/material';
+import { Box, Button, TextField, MenuItem, FormControl, InputLabel, Select, Switch, FormControlLabel, Typography } from '@mui/material';
 import { categories } from '../data/categories';
 import MapPicker from './MapPicker';
 
@@ -10,6 +10,9 @@ export default function ComplaintForm() {
   const [issue, setIssue] = useState('');
   const [detail, setDetail] = useState('');
   const [privacy, setPrivacy] = useState(false);
+  const [customCategory, setCustomCategory] = useState('');
+  const [customSubcategory, setCustomSubcategory] = useState('');
+  const [customIssue, setCustomIssue] = useState('');
 
   // Get selected category and subcategory objects
   const selectedCategory = categories.find(cat => cat.label === category);
@@ -18,14 +21,16 @@ export default function ComplaintForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: call API to submit complaint
-    alert(`Submitted: ${category} > ${subcategory} > ${issue} > ${detail}, Privacy: ${privacy ? 'Public' : 'Private'}`);
+    const finalCategory = category === "__custom_category__" ? customCategory : category;
+    const finalSubcategory = subcategory === "__custom_subcategory__" ? customSubcategory : subcategory;
+    const finalIssue = issue === "__custom_issue__" ? customIssue : issue;
+    alert(`Submitted: ${finalCategory} > ${finalSubcategory} > ${finalIssue} > ${detail}, Privacy: ${privacy ? 'Public' : 'Private'}`);
   };
 
   return (
-    <Box sx={{ width: '100%', px: { xs: 1, sm: 3, md: 6 }, py: { xs: 2, md: 4 } }}>
-      <Paper>
-        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: 900, mx: 'auto', textAlign: 'left' }}>
-          <Typography variant="h5" mb={2}>Report an Issue</Typography>
+    <Box sx={{ width: '100%', py: 2 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', textAlign: 'left' }}>
+        <Typography variant="h5" mb={2}>Report an Issue</Typography>
           {/* Horizontal Selectable Category Cards */}
           <Box sx={{ display: 'flex', overflowX: 'auto', gap: 2, mb: 3, pb: 1 }}>
             {categories.map(cat => (
@@ -33,8 +38,11 @@ export default function ComplaintForm() {
                 key={cat.label}
                 onClick={() => {
                   setCategory(cat.label);
+                  setCustomCategory('');
                   setSubcategory('');
+                  setCustomSubcategory('');
                   setIssue('');
+                  setCustomIssue('');
                 }}
                 sx={{
                   minWidth: 120,
@@ -56,35 +64,117 @@ export default function ComplaintForm() {
                 {cat.label}
               </Box>
             ))}
+            {/* Custom category button */}
+            <Box
+              key="__custom_category_btn__"
+              onClick={() => {
+                setCategory("__custom_category__");
+                setCustomCategory('');
+                setSubcategory('');
+                setCustomSubcategory('');
+                setIssue('');
+                setCustomIssue('');
+              }}
+              sx={{
+                minWidth: 120,
+                px: 2,
+                py: 1.5,
+                borderRadius: 2,
+                border: 2,
+                borderColor: category === "__custom_category__" ? 'primary.main' : 'grey.300',
+                bgcolor: category === "__custom_category__" ? 'primary.light' : 'grey.100',
+                color: category === "__custom_category__" ? 'primary.contrastText' : 'text.primary',
+                fontWeight: 600,
+                cursor: 'pointer',
+                boxShadow: category === "__custom_category__" ? 2 : 0,
+                transition: 'all 0.2s',
+                flex: '0 0 auto',
+                '&:hover': { borderColor: 'primary.main', bgcolor: 'primary.50' }
+              }}
+            >
+              Custom
+            </Box>
           </Box>
+          {/* Show custom category field if custom is selected */}
+          {category === "__custom_category__" && (
+            <>
+              <TextField
+                label="Custom Category"
+                value={customCategory}
+                onChange={e => setCustomCategory(e.target.value)}
+                margin="normal"
+                fullWidth
+                required
+              />
+              <TextField
+                label="Custom Subcategory"
+                value={customSubcategory}
+                onChange={e => setCustomSubcategory(e.target.value)}
+                margin="normal"
+                fullWidth
+                required
+              />
+            </>
+          )}
           {/* Subcategory Dropdown */}
-          {category && (
+          {category && category !== "__custom_category__" && (
             <FormControl fullWidth margin="normal" required>
               <InputLabel>Subcategory</InputLabel>
               <Select
                 value={subcategory}
-                label="Subcategory"
                 onChange={e => {
                   setSubcategory(e.target.value);
+                  setCustomSubcategory('');
                   setIssue('');
+                  setCustomIssue('');
                 }}
+                label="Subcategory"
               >
-                {selectedCategory?.subcategories.map(sub => <MenuItem key={sub.label} value={sub.label}>{sub.label}</MenuItem>)}
+                {selectedCategory?.subcategories.map(sub => (
+                  <MenuItem key={sub.label} value={sub.label}>{sub.label}</MenuItem>
+                ))}
+                <MenuItem value="__custom_subcategory__">Custom (type your own)</MenuItem>
               </Select>
             </FormControl>
           )}
+          {subcategory === "__custom_subcategory__" && (
+            <TextField
+              label="Custom Subcategory"
+              value={customSubcategory}
+              onChange={e => setCustomSubcategory(e.target.value)}
+              margin="normal"
+              fullWidth
+              required
+            />
+          )}
           {/* Issue Dropdown */}
-          {subcategory && (
+          {selectedSubcategory && (
             <FormControl fullWidth margin="normal" required>
               <InputLabel>Issue</InputLabel>
               <Select
                 value={issue}
+                onChange={e => {
+                  setIssue(e.target.value);
+                  setCustomIssue('');
+                }}
                 label="Issue"
-                onChange={e => setIssue(e.target.value)}
               >
-                {selectedSubcategory?.issues.map(issueVal => <MenuItem key={issueVal} value={issueVal}>{issueVal}</MenuItem>)}
+                {selectedSubcategory.issues.map(issue => (
+                  <MenuItem key={issue} value={issue}>{issue}</MenuItem>
+                ))}
+                <MenuItem value="__custom_issue__">Custom (type your own)</MenuItem>
               </Select>
             </FormControl>
+          )}
+          {issue === "__custom_issue__" && (
+            <TextField
+              label="Custom Issue"
+              value={customIssue}
+              onChange={e => setCustomIssue(e.target.value)}
+              margin="normal"
+              fullWidth
+              required
+            />
           )}
 
           {/* Map Picker */}
@@ -115,7 +205,6 @@ export default function ComplaintForm() {
             Submit
           </Button>
         </Box>
-      </Paper>
     </Box>
   );
 }
