@@ -1,6 +1,7 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Chip, Stack, FormControl, InputLabel, Select, MenuItem, Checkbox, TableSortLabel } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { Grid } from '@mui/material';
 import AdminAnalyticsWidgets from '../components/AdminAnalyticsWidgets';
 import AdminSidebar from '../components/AdminSidebar';
 import ComplaintHeatmap from '../components/ComplaintHeatmap';
@@ -152,6 +153,7 @@ export default function AdminPage() {
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <AdminSidebar />
       <Box sx={{ flex: 1, p: { xs: 1, md: 3 }, maxWidth: '100vw' }}>
+
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h4">Admin Dashboard</Typography>
           <AdminNotifications />
@@ -163,145 +165,184 @@ export default function AdminPage() {
         </Paper>
         <Grid container spacing={2} id="table">
           <Grid item xs={12} md={9}>
-            <AdminBulkActionsBar
-              selectedIds={selectedIds}
-              onBulkStatus={handleBulkStatus}
-              onBulkAssign={handleBulkAssign}
-              statusList={statusList}
-              staffList={staffList}
-            />
-            <AdminAdvancedSearch onSearch={handleSearch} />
-            <AdminCustomizableColumns columns={columns} onChange={handleColumnChange} />
-            <AdminExportCSV rows={filteredRows} columns={columns} />
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2}>
-              <FormControl size="small" sx={{ minWidth: 160 }}>
-                <InputLabel>Status</InputLabel>
-                <Select value={statusFilter} label="Status" onChange={e => setStatusFilter(e.target.value)}>
-                  {statusList.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
-                </Select>
-              </FormControl>
-              <FormControl size="small" sx={{ minWidth: 160 }}>
-                <InputLabel>Category</InputLabel>
-                <Select value={categoryFilter} label="Category" onChange={e => setCategoryFilter(e.target.value)}>
-                  {categoryList.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-                </Select>
-              </FormControl>
-              <FormControl size="small" sx={{ minWidth: 160 }}>
-                <InputLabel>Agency</InputLabel>
-                <Select value={agencyFilter} label="Agency" onChange={e => setAgencyFilter(e.target.value)}>
-                  <MenuItem value="All">All</MenuItem>
-                  <MenuItem value="MININFRA">MININFRA</MenuItem>
-                  <MenuItem value="WASAC">WASAC</MenuItem>
-                  <MenuItem value="RGB">RGB</MenuItem>
-                </Select>
-              </FormControl>
-            </Stack>
-            <TableContainer component={Paper} sx={{ mb: 3 }}>
-              <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      indeterminate={selectedIds.length > 0 && selectedIds.length < filteredRows.length}
-                      checked={filteredRows.length > 0 && selectedIds.length === filteredRows.length}
-                      onChange={e => handleSelectAll(e.target.checked)}
-                    />
+            <Box>
+      <AdminBulkActionsBar
+        selectedIds={selectedIds}
+        onBulkStatus={handleBulkStatus}
+        onBulkAssign={handleBulkAssign}
+        statusList={statusList}
+        staffList={staffList}
+      />
+      <AdminAdvancedSearch onSearch={handleSearch} />
+      <AdminCustomizableColumns columns={columns} onChange={handleColumnChange} />
+      <AdminExportCSV rows={filteredRows} columns={columns} />
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2}>
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel>Status</InputLabel>
+          <Select value={statusFilter} label="Status" onChange={e => setStatusFilter(e.target.value)}>
+            {statusList.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel>Category</InputLabel>
+          <Select value={categoryFilter} label="Category" onChange={e => setCategoryFilter(e.target.value)}>
+            {categoryList.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel>Agency</InputLabel>
+          <Select value={agencyFilter} label="Agency" onChange={e => setAgencyFilter(e.target.value)}>
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="MININFRA">MININFRA</MenuItem>
+            <MenuItem value="WASAC">WASAC</MenuItem>
+            <MenuItem value="RGB">RGB</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
+      <TableContainer component={Paper} sx={{ mb: 3 }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  indeterminate={selectedIds.length > 0 && selectedIds.length < filteredRows.length}
+                  checked={filteredRows.length > 0 && selectedIds.length === filteredRows.length}
+                  onChange={e => handleSelectAll(e.target.checked)}
+                />
+              </TableCell>
+              {columns.map((col: TableColumn) => (
+                <TableCell key={col} sortDirection={sortBy === col ? sortDirection : false}>
+                  <TableSortLabel
+                    active={sortBy === col}
+                    direction={sortBy === col ? sortDirection : 'asc'}
+                    onClick={() => handleSort(col)}
+                  >
+                    {col.charAt(0).toUpperCase() + col.slice(1)}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.entries(
+              filteredRows.reduce((acc, row) => {
+                acc[row.agency] = acc[row.agency] || [];
+                acc[row.agency].push(row);
+                return acc;
+              }, {} as Record<string, Complaint[]>)
+            ).map(([agency, rows]) => (
+              <React.Fragment key={agency}>
+                <TableRow sx={{ bgcolor: 'background.paper' }}>
+                  <TableCell colSpan={columns.length + 2} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>
+                    {agency} ({rows.length} complaints)
                   </TableCell>
-                  {columns.map((col: TableColumn) => (
-                    <TableCell key={col} sortDirection={sortBy === col ? sortDirection : false}>
-                      <TableSortLabel
-                        active={sortBy === col}
-                        direction={sortBy === col ? sortDirection : 'asc'}
-                        onClick={() => handleSort(col)}
-                      >
-                        {col.charAt(0).toUpperCase() + col.slice(1)}
-                      </TableSortLabel>
+                </TableRow>
+                {rows.map((row: Complaint) => (
+                  <TableRow key={row.id} selected={selectedIds.includes(row.id)}>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedIds.includes(row.id)}
+                        onChange={e => handleSelectRow(row.id, e.target.checked)}
+                      />
                     </TableCell>
-                  ))}
-                  <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(() => {
-                    // Group complaints by agency
-                    const grouped = filteredRows.reduce((acc, row) => {
-                      acc[row.agency] = acc[row.agency] || [];
-                      acc[row.agency].push(row);
-                      return acc;
-                    }, {} as Record<string, Complaint[]>);
-                    return Object.entries(grouped).map(([agency, rows]) => [
-                      <TableRow key={`agency-header-${agency}`} sx={{ bgcolor: 'background.paper' }}>
-                        <TableCell colSpan={columns.length + 2} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>
-                          {agency} ({rows.length} complaints)
-                        </TableCell>
-                      </TableRow>,
-                      ...rows.map((row: Complaint) => (
-                        <TableRow key={row.id} selected={selectedIds.includes(row.id)}>
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={selectedIds.includes(row.id)}
-                              onChange={e => handleSelectRow(row.id, e.target.checked)}
-                            />
-                          </TableCell>
-                          {columns.includes('id') && <TableCell>{row.id}</TableCell>}
-                          {columns.includes('citizen') && <TableCell>{row.citizen}</TableCell>}
-                          {columns.includes('category') && <TableCell>{row.category} / {row.subcategory}</TableCell>}
-                          {columns.includes('status') && <TableCell><Chip label={row.status} color={statusColor(row.status)} size="small" /></TableCell>}
-                          {columns.includes('date') && <TableCell>{row.date}</TableCell>}
-                          {columns.includes('assignee') && <TableCell>{row.assignee}</TableCell>}
-                          {columns.includes('agency') && <TableCell>{row.agency}</TableCell>}
-                          <TableCell>
-                            <ButtonGroup size="small" variant="outlined">
-                              <Button onClick={() => handleOpenDialog(row)}>Details</Button>
-                            </ButtonGroup>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ]).flat();
-                  })()}
-
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    {columns.includes('id') && <TableCell>{row.id}</TableCell>}
+                    {columns.includes('citizen') && <TableCell>{row.citizen}</TableCell>}
+                              <Checkbox
+                                checked={selectedIds.includes(row.id)}
+                                onChange={e => handleSelectRow(row.id, e.target.checked)}
+                              />
+                            </TableCell>
+                            {columns.includes('id') && <TableCell>{row.id}</TableCell>}
+                            {columns.includes('citizen') && <TableCell>{row.citizen}</TableCell>}
+                            {columns.includes('category') && <TableCell>{row.category} / {row.subcategory}</TableCell>}
+                            {columns.includes('status') && <TableCell><Chip label={row.status} color={statusColor(row.status)} size="small" /></TableCell>}
+                            {columns.includes('date') && <TableCell>{row.date}</TableCell>}
+                            {columns.includes('assignee') && <TableCell>{row.assignee}</TableCell>}
+                            {columns.includes('agency') && <TableCell>{row.agency}</TableCell>}
+                            <TableCell>
+                              <ButtonGroup size="small" variant="outlined">
+                                <Button onClick={() => handleOpenDialog(row)}>Details</Button>
+                              </ButtonGroup>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
           </Grid>
           <Grid item xs={12} md={3}>
-            <Paper sx={{ mb: 2, p: 2 }}>
-              <Typography variant="h6" mb={1}>Rwanda Complaints Heatmap</Typography>
-              <ComplaintHeatmap />
-            </Paper>
-            <AdminActivityFeed />
+            <Box>
+              <Paper sx={{ mb: 2, p: 2 }}>
+                <Typography variant="h6" mb={1}>Rwanda Complaints Heatmap</Typography>
+                <ComplaintHeatmap />
+              </Paper>
+              <Paper sx={{ p: 2 }}>
+                <AdminActivityFeed />
+              </Paper>
+            </Box>
           </Grid>
         </Grid>
-        {/* Complaint Details Dialog */}
-        <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-          <DialogTitle>Complaint Details</DialogTitle>
-          <DialogContent dividers>
-            {selectedComplaint && (
-              <>
-                <Typography variant="subtitle1" gutterBottom>
-                  <b>Citizen:</b> {selectedComplaint?.citizen}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  <b>Category:</b> {selectedComplaint?.category} / {selectedComplaint?.subcategory}
-                </Typography>
-                <FormControl size="small" sx={{ mt: 1, mb: 2, minWidth: 160 }}>
-                  <InputLabel>Status</InputLabel>
-                  <Select value={statusUpdate} label="Status" onChange={e => setStatusUpdate(e.target.value)}>
-                    {statusList.filter(s => s !== 'All').map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
-                  </Select>
-                </FormControl>
-                <Typography variant="body2" gutterBottom>
-                  <b>Date:</b> {selectedComplaint.date}
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                  <b>Assignee:</b> {selectedComplaint.assignee}
-                </Typography>
-                <AdminThreadedComments comments={selectedComplaint.comments} />
-              </>
-            )}
-          </DialogContent>
-        </Dialog>
       </Box>
     </Box>
+    {/* Complaint Details Dialog */}
+    <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+      <DialogTitle>Complaint Details</DialogTitle>
+      <DialogContent dividers>
+        {selectedComplaint && (
+          <>
+            <Typography variant="subtitle1" gutterBottom>
+              <b>Citizen:</b> {selectedComplaint?.citizen}
+            </Typography>
+            <Typography variant="subtitle1" gutterBottom>
+              <b>Category:</b> {selectedComplaint?.category} / {selectedComplaint?.subcategory}
+            </Typography>
+            <FormControl size="small" sx={{ mt: 1, mb: 2, minWidth: 160 }}>
+              <InputLabel>Status</InputLabel>
+              <Select value={statusUpdate} label="Status" onChange={e => setStatusUpdate(e.target.value)}>
+                {statusList.filter(s => s !== 'All').map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+              </Select>
+            </FormControl>
+            <Typography variant="body2" gutterBottom>
+              <b>Date:</b> {selectedComplaint.date}
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              <b>Assignee:</b> {selectedComplaint.assignee}
+            </Typography>
+            <AdminThreadedComments comments={selectedComplaint.comments} />
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+    {selectedComplaint && (
+      <>
+        <Typography variant="subtitle1" gutterBottom>
+          <b>Citizen:</b> {selectedComplaint?.citizen}
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          <b>Category:</b> {selectedComplaint?.category} / {selectedComplaint?.subcategory}
+        </Typography>
+        <FormControl size="small" sx={{ mt: 1, mb: 2, minWidth: 160 }}>
+          <InputLabel>Status</InputLabel>
+          <Select value={statusUpdate} label="Status" onChange={e => setStatusUpdate(e.target.value)}>
+            {statusList.filter(s => s !== 'All').map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+          </Select>
+        </FormControl>
+        <Typography variant="body2" gutterBottom>
+          <b>Date:</b> {selectedComplaint.date}
+        </Typography>
+        <Typography variant="body2" gutterBottom>
+          <b>Assignee:</b> {selectedComplaint.assignee}
+        </Typography>
+        <AdminThreadedComments comments={selectedComplaint.comments} />
+      </>
+    )}
+  </DialogContent>
+</Dialog>
+</Box>
+</Box>
   );
 }
