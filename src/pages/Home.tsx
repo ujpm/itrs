@@ -17,7 +17,7 @@ export default function Home() {
             color="primary"
             size="large"
             component={Link}
-            to="/citizen"
+            to="/complaint"
           >
             Submit a Complaint
           </Button>
