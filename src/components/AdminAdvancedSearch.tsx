@@ -11,9 +11,13 @@ const options = [
   { label: 'Pothole', value: 'Pothole' },
 ];
 
-export default function AdminAdvancedSearch({ onSearch }) {
+interface AdminAdvancedSearchProps {
+  onSearch: (term: string) => void;
+}
+
+export default function AdminAdvancedSearch({ onSearch }: AdminAdvancedSearchProps) {
   const [input, setInput] = useState('');
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<string | { label: string; value: string } | null>(null);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -30,7 +34,7 @@ export default function AdminAdvancedSearch({ onSearch }) {
           <TextField {...params} label="Search complaints" size="small" />
         )}
       />
-      <IconButton color="primary" onClick={() => onSearch(selected ? (selected.value || selected) : input)}>
+      <IconButton color="primary" onClick={() => onSearch(selected ? (typeof selected === 'object' && 'value' in selected ? selected.value : selected) : input)}>
         <SearchIcon />
       </IconButton>
     </Box>

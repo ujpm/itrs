@@ -2,18 +2,30 @@ import { Box, Typography, TextField, Button, Stack } from '@mui/material';
 import { useState } from 'react';
 
 // Mock data structure for threaded comments
-const mockComments = [
+const mockComments: CommentType[] = [
   { id: 1, sender: 'Citizen', text: 'Pothole on Main St.', date: '2025-05-15 09:00', replies: [
-    { id: 2, sender: 'Admin', text: 'We are reviewing your complaint.', date: '2025-05-15 10:00' }
+    { id: 2, sender: 'Admin', text: 'We are reviewing your complaint.', date: '2025-05-15 10:00', replies: [] }
   ] },
   { id: 3, sender: 'Citizen', text: 'Thank you!', date: '2025-05-15 11:00', replies: [] },
 ];
 
-export default function AdminThreadedComments({ comments = mockComments }) {
-  const [reply, setReply] = useState('');
-  const [replyTo, setReplyTo] = useState(null);
+interface CommentType {
+  id: number;
+  sender: string;
+  text: string;
+  date: string;
+  replies: CommentType[];
+}
 
-  function handleReply(parentId) {
+interface AdminThreadedCommentsProps {
+  comments?: CommentType[];
+}
+
+export default function AdminThreadedComments({ comments = mockComments }: AdminThreadedCommentsProps) {
+  const [reply, setReply] = useState('');
+  const [replyTo, setReplyTo] = useState<number | null>(null);
+
+  function handleReply(parentId: number) {
     setReplyTo(parentId);
   }
   function handleSendReply() {

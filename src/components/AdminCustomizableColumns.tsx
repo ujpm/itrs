@@ -9,7 +9,12 @@ const defaultColumns = [
   { key: 'assignee', label: 'Assignee' },
 ];
 
-export default function AdminCustomizableColumns({ columns, onChange }) {
+interface AdminCustomizableColumnsProps {
+  columns: string[];
+  onChange: (col: string, checked: boolean) => void;
+}
+
+export default function AdminCustomizableColumns({ columns, onChange }: AdminCustomizableColumnsProps) {
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant="subtitle2" mb={1}>Customize Columns:</Typography>

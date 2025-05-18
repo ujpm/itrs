@@ -78,7 +78,7 @@ export default function CitizenDashboard() {
       </Stack>
       {/* Statistics Widgets */}
       <Grid container spacing={2} mb={3}>
-        <Grid item xs={6} sm={3}>
+        <Grid item xs={12} sm={6}>
           <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
             <CardContent>
               <Typography variant="h6">Total</Typography>
@@ -86,7 +86,7 @@ export default function CitizenDashboard() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={6} sm={3}>
+        <Grid item xs={12} sm={6}>
           <Card sx={{ bgcolor: 'warning.main', color: 'warning.contrastText' }}>
             <CardContent>
               <Typography variant="h6">Pending</Typography>
@@ -94,7 +94,7 @@ export default function CitizenDashboard() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={6} sm={3}>
+        <Grid item xs={12} sm={6}>
           <Card sx={{ bgcolor: 'info.main', color: 'info.contrastText' }}>
             <CardContent>
               <Typography variant="h6">In Progress</Typography>
@@ -102,7 +102,7 @@ export default function CitizenDashboard() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={6} sm={3}>
+        <Grid item xs={12} sm={6}>
           <Card sx={{ bgcolor: 'success.main', color: 'success.contrastText' }}>
             <CardContent>
               <Typography variant="h6">Resolved</Typography>

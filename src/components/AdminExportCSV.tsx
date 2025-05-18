@@ -1,13 +1,18 @@
 import { Button } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 
-function convertToCSV(rows, columns) {
+function convertToCSV(rows: any[], columns: string[]) {
   const header = columns.join(',');
   const body = rows.map(row => columns.map(col => JSON.stringify(row[col] || '')).join(',')).join('\n');
   return header + '\n' + body;
 }
 
-export default function AdminExportCSV({ rows, columns }) {
+interface AdminExportCSVProps {
+  rows: any[];
+  columns: string[];
+}
+
+export default function AdminExportCSV({ rows, columns }: AdminExportCSVProps) {
   function handleExport() {
     const csv = convertToCSV(rows, columns);
     const blob = new Blob([csv], { type: 'text/csv' });
