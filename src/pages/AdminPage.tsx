@@ -27,7 +27,7 @@ import Grid from '@mui/material/Grid';
 import AdminAnalyticsWidgets from '../components/AdminAnalyticsWidgets';
 import AdminSidebar from '../components/AdminSidebar';
 import ComplaintHeatmap from '../components/ComplaintHeatmap';
-import { categoryToAgency, governmentAgencies } from '../data/agencyMapping';
+import { governmentAgencies } from '../data/agencyMapping';
 
 import AdminNotifications from '../components/AdminNotifications';
 import AdminBulkActionsBar from '../components/AdminBulkActionsBar';
@@ -93,7 +93,7 @@ export default function AdminPage() {
   // --- State ---
   const [complaints, setComplaints] = useState<Complaint[]>(initialComplaints);
   const [darkMode, setDarkMode] = useState(false);
-  const [selectedAgency, setSelectedAgency] = useState<string>('All');
+  const [selectedAgency] = useState<string>('All');
   
   // Example admin name, could come from context or props
   const adminName = 'Admin';
@@ -208,10 +208,9 @@ export default function AdminPage() {
         </svg>
       </Box>
       <AdminSidebar />
-      <Box sx={{ flex: 1, p: { xs: 1, md: 3 }, maxWidth: '100vw' }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h4">Admin Dashboard</Typography>
-          <AdminNotifications />
+      <Box sx={{ flex: 1, p: { xs: 1, md: 3 }, maxWidth: '100vw', overflow: 'auto' }}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', sm: 'center' }} mb={2} gap={2}>
+          <Typography variant="h4" sx={{ fontSize: { xs: '1.3rem', md: '2rem' } }}>Admin Dashboard</Typography>
         </Stack>
         <Fade in timeout={600}>
           <Box>
