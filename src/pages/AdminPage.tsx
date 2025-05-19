@@ -16,6 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
@@ -26,6 +27,7 @@ import Grid from '@mui/material/Grid';
 import AdminAnalyticsWidgets from '../components/AdminAnalyticsWidgets';
 import AdminSidebar from '../components/AdminSidebar';
 import ComplaintHeatmap from '../components/ComplaintHeatmap';
+import { categoryToAgency, governmentAgencies } from '../data/agencyMapping';
 
 import AdminNotifications from '../components/AdminNotifications';
 import AdminBulkActionsBar from '../components/AdminBulkActionsBar';
@@ -50,6 +52,7 @@ type Complaint = {
 const staffList = ['John', 'Jane', 'Alice', 'Dept. A', 'Dept. B'];
 const defaultColumns: string[] = ['id', 'citizen', 'category', 'status', 'date', 'assignee', 'agency'];
 const statusList: string[] = ['All', 'Pending', 'In Progress', 'Resolved'];
+const agencyList: string[] = governmentAgencies;
 
 
 
@@ -90,18 +93,19 @@ export default function AdminPage() {
   // --- State ---
   const [complaints, setComplaints] = useState<Complaint[]>(initialComplaints);
   const [darkMode, setDarkMode] = useState(false);
+  const [selectedAgency, setSelectedAgency] = useState<string>('All');
   
   // Example admin name, could come from context or props
   const adminName = 'Admin';
-  const [statusFilter] = useState('All');
-  const [categoryFilter] = useState('All');
-  const [agencyFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState<string>('All');
+  const [categoryFilter, setCategoryFilter] = useState<string>('All');
+  const [agencyFilter, setAgencyFilter] = useState<string>('All');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(null);
   const [statusUpdate, setStatusUpdate] = useState('');
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [columns, setColumns] = useState<string[]>(defaultColumns);
+  const [columns] = useState<string[]>(defaultColumns);
   const [sortBy, setSortBy] = useState<string>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
@@ -156,9 +160,6 @@ export default function AdminPage() {
     setComplaints(prev => prev.map(c => selectedIds.includes(c.id) ? { ...c, assignee: newAssignee } : c));
     setSelectedIds([]);
   }
-  
-    setColumns(prev => checked ? [...prev, col] : prev.filter(c => c !== col));
-  }
   function handleSelectAll(checked: boolean) {
     setSelectedIds(checked ? filteredRows.map(row => row.id) : []);
   }
@@ -173,10 +174,6 @@ export default function AdminPage() {
       setSortDirection('asc');
     }
   }
-  
-    setSearchTerm(term);
-  }
-
 
   // --- Render ---
   return (
@@ -242,7 +239,55 @@ export default function AdminPage() {
                 statusList={statusList}
                 staffList={staffList}
               />
-              {/* Add any missing filter controls or stacks here if needed */}
+              {/* Government Agency CTA */}
+              <Box sx={{ mb: 2, p: 2, bgcolor: '#e3f2fd', borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Typography variant="subtitle1" sx={{ flex: 1 }}>
+                  Are you a government agency? <b>Click here</b> to filter complaints associated with your department.
+                </Typography>
+                <FormControl size="small" sx={{ minWidth: 220 }}>
+                  <InputLabel>Filter by Agency</InputLabel>
+                  <Select
+                    value={agencyFilter}
+                    label="Filter by Agency"
+                    onChange={e => setAgencyFilter(e.target.value)}
+                  >
+                    <MenuItem value="All">All Government Agencies</MenuItem>
+                    {agencyList.map(agency => (
+                      <MenuItem key={agency} value={agency}>{agency}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
+                {/* Search Field */}
+                <TextField
+                  size="small"
+                  label="Search complaints"
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  sx={{ minWidth: 200 }}
+                />
+                {/* Status Filter */}
+                <FormControl size="small" sx={{ minWidth: 140 }}>
+                  <InputLabel>Status</InputLabel>
+                  <Select value={statusFilter} label="Status" onChange={e => setStatusFilter(e.target.value)}>
+                    <MenuItem value="All">All Statuses</MenuItem>
+                    {statusList.filter(s => s !== 'All').map(status => (
+                      <MenuItem key={status} value={status}>{status}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {/* Category Filter */}
+                <FormControl size="small" sx={{ minWidth: 160 }}>
+                  <InputLabel>Category</InputLabel>
+                  <Select value={categoryFilter} label="Category" onChange={e => setCategoryFilter(e.target.value)}>
+                    <MenuItem value="All">All Categories</MenuItem>
+                    {[...new Set(complaints.map(c => c.category))].sort().map(cat => (
+                      <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
               <TableContainer component={Paper} sx={{ mb: 3 }}>
                 <Table size="small">
                   <TableHead>
@@ -270,11 +315,13 @@ export default function AdminPage() {
                   </TableHead>
                   <TableBody>
                     {Object.entries(
-                      filteredRows.reduce((acc, row) => {
-                        acc[row.agency] = acc[row.agency] || [];
-                        acc[row.agency].push(row);
-                        return acc;
-                      }, {} as Record<string, Complaint[]>)
+                      filteredRows
+                        .filter(row => selectedAgency === 'All' || row.agency === selectedAgency)
+                        .reduce((acc, row) => {
+                          acc[row.agency] = acc[row.agency] || [];
+                          acc[row.agency].push(row);
+                          return acc;
+                        }, {} as Record<string, Complaint[]>)
                     ).map(([agency, rows]: [string, Complaint[]]) => (
                       <React.Fragment key={agency}>
                         <TableRow sx={{ bgcolor: 'background.paper' }}>

@@ -109,6 +109,7 @@ export default function ComplaintPage() {
             <Typography><b>Issue:</b> {complaintData.issue}</Typography>
             <Typography><b>Description:</b> {complaintData.detail}</Typography>
             <Typography><b>Privacy:</b> {complaintData.privacy ? 'Public (visible on map)' : 'Private'}</Typography>
+            <Typography><b>Agency:</b> {complaintData.agency || 'Not assigned'}</Typography>
           </Stack>
           {shareContact && (
             <>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, TextField, MenuItem, FormControl, InputLabel, Select, Switch, FormControlLabel, Typography } from '@mui/material';
 import { categories } from '../data/categories';
+import { categoryToAgency } from '../data/agencyMapping';
 import MapPicker from './MapPicker';
 
 
@@ -27,12 +28,15 @@ export default function ComplaintForm({ onContinue }: ComplaintFormProps) {
     const finalCategory = category === "__custom_category__" ? customCategory : category;
     const finalSubcategory = subcategory === "__custom_subcategory__" ? customSubcategory : subcategory;
     const finalIssue = issue === "__custom_issue__" ? customIssue : issue;
+    // Determine agency based on category or subcategory
+    let agency = categoryToAgency[finalSubcategory] || categoryToAgency[finalCategory] || '';
     const formData = {
       category: finalCategory,
       subcategory: finalSubcategory,
       issue: finalIssue,
       detail,
       privacy,
+      agency,
     };
     if (onContinue) {
       onContinue(formData);
