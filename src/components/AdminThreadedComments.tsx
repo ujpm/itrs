@@ -25,10 +25,10 @@ export default function AdminThreadedComments({ comments = mockComments }: Admin
   const [reply, setReply] = useState('');
   const [replyTo, setReplyTo] = useState<number | null>(null);
 
-  function handleReply(parentId: number) {
+  function handleReply(parentId: number): void {
     setReplyTo(parentId);
   }
-  function handleSendReply() {
+  function handleSendReply(): void {
     // TODO: Integrate with backend
     alert(`Reply sent: ${reply} (to comment #${replyTo})`);
     setReply('');

@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 
-function convertToCSV(rows: any[], columns: string[]) {
+function convertToCSV(rows: Record<string, any>[], columns: string[]): string {
   const header = columns.join(',');
   const body = rows.map(row => columns.map(col => JSON.stringify(row[col] || '')).join(',')).join('\n');
   return header + '\n' + body;
@@ -12,7 +12,7 @@ interface AdminExportCSVProps {
   columns: string[];
 }
 
-export default function AdminExportCSV({ rows, columns }: AdminExportCSVProps) {
+export default function AdminExportCSV({ rows, columns }: AdminExportCSVProps): JSX.Element {
   function handleExport() {
     const csv = convertToCSV(rows, columns);
     const blob = new Blob([csv], { type: 'text/csv' });

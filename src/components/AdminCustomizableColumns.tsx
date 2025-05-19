@@ -25,7 +25,7 @@ export default function AdminCustomizableColumns({ columns, onChange }: AdminCus
             control={
               <Checkbox
                 checked={columns.includes(col.key)}
-                onChange={(_, checked) => onChange(col.key, checked)}
+                onChange={(_: React.ChangeEvent<HTMLInputElement>, checked: boolean) => onChange(col.key, checked)}
               />
             }
             label={col.label}

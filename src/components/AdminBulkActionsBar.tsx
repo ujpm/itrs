@@ -22,7 +22,7 @@ export default function AdminBulkActionsBar({ selectedIds, onBulkStatus, onBulkA
           size="small"
           value={bulkStatus}
           displayEmpty
-          onChange={e => setBulkStatus((e.target as HTMLInputElement).value as string)}
+          onChange={(e: React.ChangeEvent<{ value: unknown }>) => setBulkStatus(e.target.value as string)}
           sx={{ minWidth: 120 }}
         >
           <MenuItem value="">Update Status</MenuItem>
@@ -43,7 +43,7 @@ export default function AdminBulkActionsBar({ selectedIds, onBulkStatus, onBulkA
           size="small"
           value={bulkAssignee}
           displayEmpty
-          onChange={e => setBulkAssignee((e.target as HTMLInputElement).value as string)}
+          onChange={(e: React.ChangeEvent<{ value: unknown }>) => setBulkAssignee(e.target.value as string)}
           sx={{ minWidth: 120 }}
         >
           <MenuItem value="">Assign To</MenuItem>

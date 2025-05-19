@@ -18,7 +18,8 @@ const mockComplaints = [
   ] },
 ];
 
-function statusColor(status: string) {
+function statusColor(status: string): "warning" | "info" | "success" | "default" {
+
   switch (status) {
     case 'Pending': return 'warning';
     case 'In Progress': return 'info';
@@ -77,31 +78,42 @@ export default function CitizenDashboard() {
       </Stack>
       {/* Statistics Widgets */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2, mb: 3 }}>
-        <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+        <Grid container spacing={2}>
+  <Grid item xs={12} sm={6}>
+    <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
           <CardContent>
             <Typography variant="h6">Total</Typography>
             <Typography variant="h4">{total}</Typography>
           </CardContent>
         </Card>
-        <Card sx={{ bgcolor: 'warning.main', color: 'warning.contrastText' }}>
+          </Grid>
+  <Grid item xs={12} sm={6}>
+    <Card sx={{ bgcolor: 'warning.main', color: 'warning.contrastText' }}>
           <CardContent>
             <Typography variant="h6">Pending</Typography>
             <Typography variant="h4">{pending}</Typography>
           </CardContent>
         </Card>
-        <Card sx={{ bgcolor: 'info.main', color: 'info.contrastText' }}>
+          </Grid>
+  <Grid item xs={12} sm={6}>
+    <Card sx={{ bgcolor: 'info.main', color: 'info.contrastText' }}>
           <CardContent>
             <Typography variant="h6">In Progress</Typography>
             <Typography variant="h4">{inProgress}</Typography>
           </CardContent>
         </Card>
-        <Card sx={{ bgcolor: 'success.main', color: 'success.contrastText' }}>
+          </Grid>
+  <Grid item xs={12} sm={6}>
+    <Card sx={{ bgcolor: 'success.main', color: 'success.contrastText' }}>
           <CardContent>
             <Typography variant="h6">Resolved</Typography>
             <Typography variant="h4">{resolved}</Typography>
           </CardContent>
         </Card>
-      </Box>
+          </Card>
+  </Grid>
+</Grid>
+</Box>
       {/* Filter Dropdown */}
       <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
         <InputLabel>Status Filter</InputLabel>
@@ -176,9 +188,15 @@ export default function CitizenDashboard() {
                         {c.sender} <span style={{ fontWeight: 400, color: '#888', fontSize: 12 }}>({c.date})</span>
                       </Typography>
                       <Typography variant="body2">{c.text}</Typography>
-                    </Box>
+                        </Card>
+  </Grid>
+</Grid>
+</Box>
                   ))}
-                </Box>
+                    </Card>
+  </Grid>
+</Grid>
+</Box>
                 <TextField
                   fullWidth
                   label="Reply"
@@ -189,7 +207,10 @@ export default function CitizenDashboard() {
                   variant="outlined"
                   sx={{ mt: 1 }}
                 />
-              </Box>
+                  </Card>
+  </Grid>
+</Grid>
+</Box>
             </>
           )}
         </DialogContent>
@@ -198,6 +219,9 @@ export default function CitizenDashboard() {
           <Button onClick={handleSendReply} disabled={!reply.trim()} variant="contained">Send Reply</Button>
         </DialogActions>
       </Dialog>
-    </Box>
+        </Card>
+  </Grid>
+</Grid>
+</Box>
   );
 }

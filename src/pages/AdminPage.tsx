@@ -244,12 +244,12 @@ export default function AdminPage() {
           </Box>
         </Fade>
         <Grid container columns={12} spacing={2} id="table">
-          <Grid sx={{ gridColumn: { xs: 'span 12', md: 'span 9' } }}>
+          <Grid item xs={12} md={9}>
             <Box>
               <AdminBulkActionsBar
                 selectedIds={selectedIds}
-                onBulkStatus={handleBulkStatus}
-                onBulkAssign={handleBulkAssign}
+                onBulkStatus={(newStatus: string) => handleBulkStatus(newStatus)}
+                onBulkAssign={(newAssignee: string) => handleBulkAssign(newAssignee)}
                 statusList={statusList}
                 staffList={staffList}
               />

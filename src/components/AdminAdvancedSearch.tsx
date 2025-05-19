@@ -34,7 +34,7 @@ export default function AdminAdvancedSearch({ onSearch }: AdminAdvancedSearchPro
           <TextField {...params} label="Search complaints" size="small" />
         )}
       />
-      <IconButton color="primary" onClick={() => onSearch(selected ? (typeof selected === 'object' && 'value' in selected ? selected.value : selected) : input)}>
+      <IconButton color="primary" onClick={(): void => onSearch(selected ? (typeof selected === 'object' && 'value' in selected ? selected.value : selected) : input)}>
         <SearchIcon />
       </IconButton>
     </Box>
