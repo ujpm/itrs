@@ -10,6 +10,7 @@ interface ComplaintFormProps {
 }
 
 export default function ComplaintForm({ onContinue }: ComplaintFormProps) {
+  const [file, setFile] = useState<File | null>(null);
   const [category, setCategory] = useState('');
   const [subcategory, setSubcategory] = useState('');
   const [issue, setIssue] = useState('');
@@ -37,11 +38,12 @@ export default function ComplaintForm({ onContinue }: ComplaintFormProps) {
       detail,
       privacy,
       agency,
+      file, // optional file
     };
     if (onContinue) {
       onContinue(formData);
     } else {
-      alert(`Submitted: ${finalCategory} > ${finalSubcategory} > ${finalIssue} > ${detail}, Privacy: ${privacy ? 'Public' : 'Private'}`);
+      alert(`Submitted: ${finalCategory} > ${finalSubcategory} > ${finalIssue} > ${detail}, Privacy: ${privacy ? 'Public' : 'Private'}` + (file ? `, File: ${file.name}` : ''));
     }
   };
 
@@ -207,6 +209,15 @@ export default function ComplaintForm({ onContinue }: ComplaintFormProps) {
             fullWidth
             margin="normal"
             required
+          />
+          <Typography variant="body2" sx={{ mt: 2, mb: 1 }} color="text.secondary">
+            If you would like to upload a supporting file (e.g., photo, document), you can do so below. <b>This is optional.</b>
+          </Typography>
+          <input
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.zip,.rar,.mp4,.mp3,.avi,.mov,.ppt,.pptx"
+            onChange={e => setFile(e.target.files ? e.target.files[0] : null)}
+            style={{ display: 'block', marginBottom: 16 }}
           />
           <FormControlLabel
             control={<Switch checked={privacy} onChange={e => setPrivacy(e.target.checked)} />}
