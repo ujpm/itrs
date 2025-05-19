@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const complaintsRouter = require('./routes/complaints');
+const authRouter = require('./routes/auth');
+const usersRouter = require('./routes/users');
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ mongoose.connect(process.env.MONGODB_URI, {
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
 app.use('/api/complaints', complaintsRouter);
 
 const PORT = process.env.PORT || 5000;

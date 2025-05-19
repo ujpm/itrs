@@ -3,7 +3,6 @@ import { Box, Typography, Button, ButtonGroup, Table, TableBody, TableCell, Tabl
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ComplaintHeatmap from '../components/ComplaintHeatmap';
 import { Link } from 'react-router-dom';
-import Grid from '@mui/material/Grid';
 
 const mockComplaints = [
   { id: 1, category: 'Infrastructure', subcategory: 'Roads', status: 'Pending', date: '2025-05-15', hasUnread: true, comments: [
@@ -77,40 +76,32 @@ export default function CitizenDashboard() {
         </Button>
       </Stack>
       {/* Statistics Widgets */}
-      <Grid container spacing={2} mb={3}>
-        <Grid item xs={12} sm={6}>
-          <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
-            <CardContent>
-              <Typography variant="h6">Total</Typography>
-              <Typography variant="h4">{total}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card sx={{ bgcolor: 'warning.main', color: 'warning.contrastText' }}>
-            <CardContent>
-              <Typography variant="h6">Pending</Typography>
-              <Typography variant="h4">{pending}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card sx={{ bgcolor: 'info.main', color: 'info.contrastText' }}>
-            <CardContent>
-              <Typography variant="h6">In Progress</Typography>
-              <Typography variant="h4">{inProgress}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card sx={{ bgcolor: 'success.main', color: 'success.contrastText' }}>
-            <CardContent>
-              <Typography variant="h6">Resolved</Typography>
-              <Typography variant="h4">{resolved}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2, mb: 3 }}>
+        <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+          <CardContent>
+            <Typography variant="h6">Total</Typography>
+            <Typography variant="h4">{total}</Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ bgcolor: 'warning.main', color: 'warning.contrastText' }}>
+          <CardContent>
+            <Typography variant="h6">Pending</Typography>
+            <Typography variant="h4">{pending}</Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ bgcolor: 'info.main', color: 'info.contrastText' }}>
+          <CardContent>
+            <Typography variant="h6">In Progress</Typography>
+            <Typography variant="h4">{inProgress}</Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ bgcolor: 'success.main', color: 'success.contrastText' }}>
+          <CardContent>
+            <Typography variant="h6">Resolved</Typography>
+            <Typography variant="h4">{resolved}</Typography>
+          </CardContent>
+        </Card>
+      </Box>
       {/* Filter Dropdown */}
       <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
         <InputLabel>Status Filter</InputLabel>

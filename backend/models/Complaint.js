@@ -16,6 +16,14 @@ const ComplaintSchema = new mongoose.Schema({
   status: { type: String, enum: ['submitted', 'assigned', 'resolved'], default: 'submitted' },
   response: { type: String },
   citizenContact: { type: String },
+  attachments: [
+    {
+      url: String,
+      filename: String,
+      mimetype: String,
+      size: Number
+    }
+  ],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Complaint', ComplaintSchema);
