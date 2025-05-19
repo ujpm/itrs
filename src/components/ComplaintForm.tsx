@@ -4,7 +4,11 @@ import { categories } from '../data/categories';
 import MapPicker from './MapPicker';
 
 
-export default function ComplaintForm() {
+interface ComplaintFormProps {
+  onContinue?: (data: any) => void;
+}
+
+export default function ComplaintForm({ onContinue }: ComplaintFormProps) {
   const [category, setCategory] = useState('');
   const [subcategory, setSubcategory] = useState('');
   const [issue, setIssue] = useState('');
@@ -20,11 +24,21 @@ export default function ComplaintForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: call API to submit complaint
     const finalCategory = category === "__custom_category__" ? customCategory : category;
     const finalSubcategory = subcategory === "__custom_subcategory__" ? customSubcategory : subcategory;
     const finalIssue = issue === "__custom_issue__" ? customIssue : issue;
-    alert(`Submitted: ${finalCategory} > ${finalSubcategory} > ${finalIssue} > ${detail}, Privacy: ${privacy ? 'Public' : 'Private'}`);
+    const formData = {
+      category: finalCategory,
+      subcategory: finalSubcategory,
+      issue: finalIssue,
+      detail,
+      privacy,
+    };
+    if (onContinue) {
+      onContinue(formData);
+    } else {
+      alert(`Submitted: ${finalCategory} > ${finalSubcategory} > ${finalIssue} > ${detail}, Privacy: ${privacy ? 'Public' : 'Private'}`);
+    }
   };
 
   return (

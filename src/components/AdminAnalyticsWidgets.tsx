@@ -1,4 +1,4 @@
-import { Box, Paper, Typography, Stack } from '@mui/material';
+import { Paper, Typography, Stack } from '@mui/material';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const pieData = [
