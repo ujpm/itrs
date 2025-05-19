@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Typography, Button, ButtonGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Stack, Paper, IconButton, Badge, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, FormControl, InputLabel, Select, Card, CardContent } from '@mui/material';
+import { Box, Typography, Button, ButtonGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Stack, Paper, IconButton, Badge, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, FormControl, InputLabel, Select, Card, CardContent, Grid } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ComplaintHeatmap from '../components/ComplaintHeatmap';
 import { Link } from 'react-router-dom';
@@ -77,43 +77,40 @@ export default function CitizenDashboard() {
         </Button>
       </Stack>
       {/* Statistics Widgets */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2, mb: 3 }}>
-        <Grid container spacing={2}>
-  <Grid item xs={12} sm={6}>
-    <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
-          <CardContent>
-            <Typography variant="h6">Total</Typography>
-            <Typography variant="h4">{total}</Typography>
-          </CardContent>
-        </Card>
-          </Grid>
-  <Grid item xs={12} sm={6}>
-    <Card sx={{ bgcolor: 'warning.main', color: 'warning.contrastText' }}>
-          <CardContent>
-            <Typography variant="h6">Pending</Typography>
-            <Typography variant="h4">{pending}</Typography>
-          </CardContent>
-        </Card>
-          </Grid>
-  <Grid item xs={12} sm={6}>
-    <Card sx={{ bgcolor: 'info.main', color: 'info.contrastText' }}>
-          <CardContent>
-            <Typography variant="h6">In Progress</Typography>
-            <Typography variant="h4">{inProgress}</Typography>
-          </CardContent>
-        </Card>
-          </Grid>
-  <Grid item xs={12} sm={6}>
-    <Card sx={{ bgcolor: 'success.main', color: 'success.contrastText' }}>
-          <CardContent>
-            <Typography variant="h6">Resolved</Typography>
-            <Typography variant="h4">{resolved}</Typography>
-          </CardContent>
-        </Card>
+      <Grid container spacing={2} mb={3}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+            <CardContent>
+              <Typography variant="h6">Total</Typography>
+              <Typography variant="h4">{total}</Typography>
+            </CardContent>
           </Card>
-  </Grid>
-</Grid>
-</Box>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ bgcolor: 'warning.main', color: 'warning.contrastText' }}>
+            <CardContent>
+              <Typography variant="h6">Pending</Typography>
+              <Typography variant="h4">{pending}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ bgcolor: 'info.main', color: 'info.contrastText' }}>
+            <CardContent>
+              <Typography variant="h6">In Progress</Typography>
+              <Typography variant="h4">{inProgress}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ bgcolor: 'success.main', color: 'success.contrastText' }}>
+            <CardContent>
+              <Typography variant="h6">Resolved</Typography>
+              <Typography variant="h4">{resolved}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
       {/* Filter Dropdown */}
       <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
         <InputLabel>Status Filter</InputLabel>
@@ -188,15 +185,9 @@ export default function CitizenDashboard() {
                         {c.sender} <span style={{ fontWeight: 400, color: '#888', fontSize: 12 }}>({c.date})</span>
                       </Typography>
                       <Typography variant="body2">{c.text}</Typography>
-                        </Card>
-  </Grid>
-</Grid>
-</Box>
+                    </Box>
                   ))}
-                    </Card>
-  </Grid>
-</Grid>
-</Box>
+                </Box>
                 <TextField
                   fullWidth
                   label="Reply"
@@ -207,11 +198,8 @@ export default function CitizenDashboard() {
                   variant="outlined"
                   sx={{ mt: 1 }}
                 />
-                  </Card>
-  </Grid>
-</Grid>
-</Box>
-            </>
+              </Box>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>
@@ -219,9 +207,6 @@ export default function CitizenDashboard() {
           <Button onClick={handleSendReply} disabled={!reply.trim()} variant="contained">Send Reply</Button>
         </DialogActions>
       </Dialog>
-        </Card>
-  </Grid>
-</Grid>
-</Box>
+    </Box>
   );
 }
