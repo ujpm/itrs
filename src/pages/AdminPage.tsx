@@ -177,41 +177,56 @@ export default function AdminPage() {
 
   // --- Render ---
   return (
-    <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: darkMode ? '#181a20' : '#f6f7fb', transition: 'background 0.3s' }}>
-      {/* HEADER ART & WELCOME */}
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: { xs: 2, md: 6 }, pt: 4, pb: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Box sx={{ width: 58, height: 58, bgcolor: 'primary.main', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 3 }}>
-            <PublicIcon sx={{ color: 'white', fontSize: 36 }} />
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%', bgcolor: darkMode ? '#181a20' : '#f6f7fb', transition: 'background 0.3s' }}>
+      {/* HEADER */}
+      <Box sx={{
+        width: '100%',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1201,
+        bgcolor: 'background.paper',
+        boxShadow: 2,
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: { xs: 2, md: 6 }, pt: 4, pb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ width: 58, height: 58, bgcolor: 'primary.main', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 3 }}>
+              <PublicIcon sx={{ color: 'white', fontSize: 36 }} />
+            </Box>
+            <Box>
+              <Typography variant="h4" sx={{ fontWeight: 700, color: darkMode ? 'grey.100' : 'primary.main' }}>Welcome, {adminName}!</Typography>
+              <Typography variant="body1" sx={{ color: darkMode ? 'grey.300' : 'text.secondary' }}>
+                "Leadership is not a position or a title, it is action and example."
+              </Typography>
+            </Box>
           </Box>
-          <Box>
-            <Typography variant="h4" sx={{ fontWeight: 700, color: darkMode ? 'grey.100' : 'primary.main' }}>Welcome, {adminName}!</Typography>
-            <Typography variant="body1" sx={{ color: darkMode ? 'grey.300' : 'text.secondary' }}>
-              "Leadership is not a position or a title, it is action and example."
-            </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Tooltip title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
+              <IconButton onClick={() => setDarkMode(dm => !dm)}>
+                {darkMode ? <WbSunnyIcon /> : <DarkModeIcon />}
+              </IconButton>
+            </Tooltip>
+            <AdminNotifications />
           </Box>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Tooltip title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
-            <IconButton onClick={() => setDarkMode(dm => !dm)}>
-              {darkMode ? <WbSunnyIcon /> : <DarkModeIcon />}
-            </IconButton>
-          </Tooltip>
-          <AdminNotifications />
+        {/* SVG ART */}
+        <Box sx={{ width: '100%', maxWidth: 900, mx: 'auto', mt: 2, mb: 3 }}>
+          <svg width="100%" height="60" viewBox="0 0 900 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="450" cy="30" rx="440" ry="15" fill={darkMode ? '#23263a' : '#e3e8f0'} />
+            <ellipse cx="450" cy="35" rx="390" ry="10" fill={darkMode ? '#23263a' : '#f6f7fb'} />
+          </svg>
         </Box>
       </Box>
-      {/* SVG ART */}
-      <Box sx={{ width: '100%', maxWidth: 900, mx: 'auto', mt: 2, mb: 3 }}>
-        <svg width="100%" height="60" viewBox="0 0 900 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="450" cy="30" rx="440" ry="15" fill={darkMode ? '#23263a' : '#e3e8f0'} />
-          <ellipse cx="450" cy="35" rx="390" ry="10" fill={darkMode ? '#23263a' : '#f6f7fb'} />
-        </svg>
-      </Box>
-      <AdminSidebar />
-      <Box sx={{ flex: 1, p: { xs: 1, md: 3 }, maxWidth: '100vw', overflow: 'auto' }}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', sm: 'center' }} mb={2} gap={2}>
-          <Typography variant="h4" sx={{ fontSize: { xs: '1.3rem', md: '2rem' } }}>Admin Dashboard</Typography>
-        </Stack>
+      {/* Main Content Area: Sidebar + Dashboard */}
+      <Box sx={{ display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden', width: '100%' }}>
+        {/* Sidebar */}
+        <Box sx={{ flex: '0 0 auto', zIndex: 1200, alignSelf: 'flex-start', height: 'auto', minHeight: 0, pt: { xs: '72px', md: '112px' } }}>
+          <AdminSidebar />
+        </Box>
+        {/* Dashboard Content */}
+        <Box sx={{ flex: 1, overflow: 'auto', p: { xs: 1, md: 3 }, maxWidth: '100vw', minWidth: 0, pt: { xs: '72px', md: '112px' } }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', sm: 'center' }} mb={2} gap={2}>
+            <Typography variant="h4" sx={{ fontSize: { xs: '1.3rem', md: '2rem' } }}>Admin Dashboard</Typography>
+          </Stack>
         <Fade in timeout={600}>
           <Box>
             <Card sx={{ mb: 2, boxShadow: 3 }}>
@@ -387,6 +402,8 @@ export default function AdminPage() {
           )}
         </DialogContent>
       </Dialog>
+      </Box>
+
     </Box>
   );
 }
