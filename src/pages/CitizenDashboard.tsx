@@ -199,7 +199,7 @@ export default function CitizenDashboard() {
                   sx={{ mt: 1 }}
                 />
               </Box>
-            </Box>
+            </>
           )}
         </DialogContent>
         <DialogActions>
